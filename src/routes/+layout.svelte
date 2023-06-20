@@ -3,7 +3,7 @@
 	import '../app.postcss';
 </script>
 
-<div class="container" style="height: 100vh; overflow: hidden;">
+<div class="container">
 	<slot />
 	<SvelteToast />
 </div>

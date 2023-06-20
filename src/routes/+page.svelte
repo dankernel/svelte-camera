@@ -157,7 +157,7 @@
 </script>
 
 {#if isLandscape}
-	<div>
+	<div style="height: 100vh; overflow: hidden;">
 		<div style="position: relative; width: 640px; height: 480px;">
 			<!-- svelte-ignore a11y-media-has-caption -->
 			<video
