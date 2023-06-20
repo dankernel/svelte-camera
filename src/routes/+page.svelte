@@ -8,7 +8,7 @@
 	let cameraView: HTMLVideoElement | null = null;
 	let overlay: HTMLCanvasElement;
 
-	let cameras = [];
+	let cameras: any[] = [];
 	let selectedCameraId: string | undefined;
 
 	let isLandscape = false;
@@ -66,6 +66,10 @@
 		}
 
 		const context = overlay.getContext('2d');
+		if (context == null) {
+			return;
+		}
+
 		context.clearRect(0, 0, overlay.width, overlay.height);
 		context.lineWidth = 10;
 
@@ -116,6 +120,9 @@
 		} else {
 			cameraView.play();
 			const context = overlay.getContext('2d');
+			if (context == null) {
+				return;
+			}
 			context.clearRect(0, 0, overlay.width, overlay.height);
 			return;
 		}
@@ -148,7 +155,8 @@
 
 {#if isLandscape}
 	<div>
-		<div style="position: relative; width: 320px; height: 240px;">
+		<div style="position: relative; width: 640px; height: 480px;">
+			<!-- svelte-ignore a11y-media-has-caption -->
 			<video
 				id="cameraview"
 				width="1280"
