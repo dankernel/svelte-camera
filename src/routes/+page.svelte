@@ -34,7 +34,10 @@
 
 	function camInitFailed(error: any): void {
 		console.error('get camera permission failed : ', error);
-		alert('get camera permission failed');
+
+		if (isLandscape) {
+			alert('get camera permission failed');
+		}
 	}
 
 	async function mainInit(): Promise<void> {
@@ -170,7 +173,7 @@
 			<canvas
 				id="overlay"
 				width="1280"
-				height="700"
+				height="720"
 				bind:this={overlay}
 				style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain;"
 			/>
