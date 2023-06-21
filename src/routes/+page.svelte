@@ -181,7 +181,7 @@
 					style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain;"
 				/>
 			</div>
-			<div style="display: flex; align-items: center;">
+			<div style="display: flex; align-items: center; position: relative; width: 10%;">
 				<button on:click={captureAndSendImage}>{buttonText}</button>
 			</div>
 		</div>
