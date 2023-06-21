@@ -157,40 +157,45 @@
 </script>
 
 {#if isLandscape}
-	<div style="height: 100vh; overflow: hidden;">
-		<div style="position: relative; width: 640px; height: 480px;">
-			<!-- svelte-ignore a11y-media-has-caption -->
-			<video
-				id="cameraview"
-				width="1280"
-				height="720"
-				autoplay
-				playsinline
-				bind:this={cameraView}
-				style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain;"
-			/>
+	<div style="height: 100vh;">
+		<div style="display: flex;">
+			<div style="position: relative; width: 640px; height: 360px;">
+				<!-- svelte-ignore a11y-media-has-caption -->
+				<video
+					id="cameraview"
+					width="1280"
+					height="720"
+					autoplay
+					playsinline
+					bind:this={cameraView}
+					style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain;"
+				/>
 
-			<canvas
-				id="overlay"
-				width="1280"
-				height="720"
-				bind:this={overlay}
-				style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain;"
-			/>
+				<canvas
+					id="overlay"
+					width="1280"
+					height="720"
+					bind:this={overlay}
+					style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain;"
+				/>
+			</div>
+			<div style="display: flex; align-items: center; height: 100vh;">
+				<button on:click={startCamera}>Start Camera</button>
+			</div>
 		</div>
 
-		<input bind:value={apiEndpoint} type="text" placeholder="Enter API Endpoint" />
-		<button on:click={captureAndSendImage}>{buttonText}</button>
-		<pre>{JSON.stringify(data, null, 2)}</pre>
+		<div>
+			<input bind:value={apiEndpoint} type="text" placeholder="Enter API Endpoint" />
+			<button on:click={captureAndSendImage}>{buttonText}</button>
+			<pre>{JSON.stringify(data, null, 2)}</pre>
 
-		<select bind:value={selectedCameraId}>
-			<option disabled={true} selected={true}> -- select a camera --</option>
-			{#each cameras as camera (camera.deviceId)}
-				<option value={camera.deviceId}>{camera.label}</option>
-			{/each}
-		</select>
-
-		<button on:click={startCamera}>Start Camera</button>
+			<select bind:value={selectedCameraId}>
+				<option disabled={true} selected={true}> -- select a camera --</option>
+				{#each cameras as camera (camera.deviceId)}
+					<option value={camera.deviceId}>{camera.label}</option>
+				{/each}
+			</select>
+		</div>
 	</div>
 {:else}
 	<div>가로 모드로 전환해 주세요</div>
