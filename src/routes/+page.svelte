@@ -1,5 +1,13 @@
 <script lang="ts">
+	import { Button, Drawer, Input, Select } from 'flowbite-svelte';
 	import { afterUpdate, onMount } from 'svelte';
+	import { sineIn } from 'svelte/easing';
+	let hidden1 = true;
+	let transitionParams = {
+		x: -320,
+		duration: 200,
+		easing: sineIn
+	};
 
 	let apiEndpoint = 'https://vhi44p15j3.execute-api.ap-northeast-2.amazonaws.com/test/momp-od';
 	let buttonText = 'Capture';
@@ -119,16 +127,23 @@
 		if (!cameraView) return;
 
 		if (!cameraView.paused) {
+			// Play to stop
 			cameraView.pause();
 			buttonText = 'Play';
 		} else {
+			// Stop to play
 			cameraView.play();
-			buttonText = 'Capture';
+
+			data = null;
+
 			const context = overlay.getContext('2d');
 			if (context == null) {
+				console.log('context is null');
 				return;
 			}
 			context.clearRect(0, 0, overlay.width, overlay.height);
+			console.log('clearRect');
+			buttonText = 'Capture';
 			return;
 		}
 
@@ -181,27 +196,32 @@
 					style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain;"
 				/>
 			</div>
-			<div style="display: flex; align-items: center; position: relative; width: 10%;">
-				<button on:click={captureAndSendImage}>{buttonText}</button>
+			<div style="align-items: center; position: relative; width: 10%; ">
+				<div>
+					<Button on:click={captureAndSendImage}>{buttonText}</Button>
+					<Button on:click={() => (hidden1 = false)}>Option</Button>
+				</div>
 			</div>
 		</div>
 
 		<br />
-
-		<div>
-			<input bind:value={apiEndpoint} type="text" placeholder="Enter API Endpoint" />
-
-			<pre>{JSON.stringify(data, null, 2)}</pre>
-
-			<select bind:value={selectedCameraId}>
-				<option disabled={true} selected={true}> -- select a camera --</option>
-				{#each cameras as camera (camera.deviceId)}
-					<option value={camera.deviceId}>{camera.label}</option>
-				{/each}
-			</select>
-			<button on:click={startCamera}>Start Camera</button>
-		</div>
 	</div>
 {:else}
 	<div>가로 모드로 전환해 주세요</div>
 {/if}
+
+<Drawer transitionType="fly" {transitionParams} bind:hidden={hidden1} id="sidebar1">
+	<div>
+		<Input bind:value={apiEndpoint} type="text" placeholder="Enter API Endpoint" />
+
+		<pre>{JSON.stringify(data, null, 2)}</pre>
+
+		<Select bind:value={selectedCameraId}>
+			<option disabled={true} selected={true}> -- select a camera --</option>
+			{#each cameras as camera (camera.deviceId)}
+				<option value={camera.deviceId}>{camera.label}</option>
+			{/each}
+		</Select>
+		<Button on:click={startCamera}>Start Camera</Button>
+	</div>
+</Drawer>
