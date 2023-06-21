@@ -2,7 +2,7 @@
 	import { afterUpdate, onMount } from 'svelte';
 
 	let apiEndpoint = 'https://vhi44p15j3.execute-api.ap-northeast-2.amazonaws.com/test/momp-od';
-	let buttonText = 'Capture and Send Image';
+	let buttonText = 'Capture';
 	let data: any = null;
 
 	let cameraView: HTMLVideoElement | null = null;
@@ -120,8 +120,10 @@
 
 		if (!cameraView.paused) {
 			cameraView.pause();
+			buttonText = 'Play';
 		} else {
 			cameraView.play();
+			buttonText = 'Capture';
 			const context = overlay.getContext('2d');
 			if (context == null) {
 				return;
@@ -157,7 +159,7 @@
 </script>
 
 {#if isLandscape}
-	<div style="height: 100vh;">
+	<div>
 		<div style="display: flex;">
 			<div style="position: relative; width: 640px; height: 360px;">
 				<!-- svelte-ignore a11y-media-has-caption -->
@@ -179,14 +181,16 @@
 					style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain;"
 				/>
 			</div>
-			<div style="display: flex; align-items: center; height: 100vh;">
-				<button on:click={startCamera}>Start Camera</button>
+			<div style="display: flex; align-items: center;">
+				<button on:click={captureAndSendImage}>{buttonText}</button>
 			</div>
 		</div>
 
+		<br />
+
 		<div>
 			<input bind:value={apiEndpoint} type="text" placeholder="Enter API Endpoint" />
-			<button on:click={captureAndSendImage}>{buttonText}</button>
+
 			<pre>{JSON.stringify(data, null, 2)}</pre>
 
 			<select bind:value={selectedCameraId}>
@@ -195,6 +199,7 @@
 					<option value={camera.deviceId}>{camera.label}</option>
 				{/each}
 			</select>
+			<button on:click={startCamera}>Start Camera</button>
 		</div>
 	</div>
 {:else}
