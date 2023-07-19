@@ -5,7 +5,5 @@
 
 <div class="container">
 	<slot />
-	<br />
-
 	<SvelteToast />
 </div>
